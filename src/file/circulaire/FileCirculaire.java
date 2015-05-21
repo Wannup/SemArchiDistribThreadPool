@@ -1,42 +1,60 @@
 package file.circulaire;
 
-public class FileCirculaire {
+public class FileCirculaire<E> {
 
-	private Node lastNode;
-	private Node currentNode;
+	private int size;
+	private Node<E> lastNode;
 	
 	public FileCirculaire(){
-		
+		this.size = 0;
+		this.lastNode = null;
 	}
 	
-	/*public FileCirculaire(Node lastNode, Node currentNode) {
-	
-		this.lastNode = lastNode;
-		this.currentNode = currentNode;
-		this.currentNode.setNext(lastNode);
-		this.lastNode.setNext(currentNode);
-	}*/
-	
-	public void addNode(Node node){
-		if(currentNode != null){
-			
+	public void addNode(E value){
+		Node<E> newNode = new Node<E>(value);
+		
+		if(size == 0){
+			//if empty
+			newNode.setNext(newNode);
+		}else{
+			newNode.setNext(lastNode.getNext());
+			lastNode.setNext(newNode);
 		}
 		
-		Node tempCurrent = currentNode;
-		this.currentNode = node;
-		this.currentNode.setNext(tempCurrent);
-		tempCurrent.setNext(lastNode);
-		this.lastNode.setNext(currentNode);
+		lastNode = newNode;
+		size++;
 	}
 	
-	public Node getNode(){
-		if(currentNode.equals(lastNode)){
-			Node nodeToReturn = currentNode;
-			return currentNode;
+	public E popNode(){
+
+		if(size == 0){
+			return null;
 		}
-		Node nodeToReturn = this.currentNode;
-		this.currentNode = nodeToReturn.getNext();
-		return null;
+		Node<E> ln = lastNode.getNext();
+		if(1 == size){
+			lastNode = null;
+		}else{
+			lastNode.setNext(lastNode.getNext().getNext());
+		}
+
+		size--;
+		return ln.getValue();
+	}
+
+	public int getSize() {
+		return size;
+	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("Ring: ");
+		if(lastNode != null){
+			Node<E> n = lastNode.getNext();
+			for(int i=0; i<size; i++){
+				sb.append(" " + n.getValue());
+				n = n.getNext();
+			}
+		}
+		return sb.toString();
 	}
 	
 }
