@@ -9,9 +9,9 @@ public class Worker extends Thread {
 
 	public void run() {
 		while (true) {
-			// demande un job
+			// Demande un job
 			Runnable job = myPool.nextJob();
-			// fait le job
+			// Fait le job
 			job.run();
 		}
 	}

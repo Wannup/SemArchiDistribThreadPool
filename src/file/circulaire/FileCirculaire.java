@@ -1,52 +1,61 @@
 package file.circulaire;
 
-public class FileCirculaire {
+public class FileCirculaire<E> {
 
-	private Node lastNode;
-	private Node firstNode;
+	private int size;
+	private Node<E> lastNode;
 	
 	public FileCirculaire(){
-		
+		this.size = 0;
+		this.lastNode = null;
 	}
 	
-	/*public FileCirculaire(Node lastNode, Node currentNode) {
-	
-		this.lastNode = lastNode;
-		this.currentNode = currentNode;
-		this.currentNode.setNext(lastNode);
-		this.lastNode.setNext(currentNode);
-	}*/
-	
-	public void addNode(Node node){
-		if(firstNode == null && lastNode == null){
-			firstNode = node;
-		}
-		else if(firstNode != null && lastNode == null){
-			lastNode = node;
-			firstNode.setNext(lastNode);
-			lastNode.setNext(firstNode);
-		}
-		else{
-			Node nodeNext = firstNode;
-			firstNode = node;
-		//	firstNode.setNext(next);
+
+	public void addNode(E value){
+		Node<E> newNode = new Node<E>(value);
+		
+		if(size == 0){
+			//if empty
+			newNode.setNext(newNode);
+		}else{
+			newNode.setNext(lastNode.getNext());
+			lastNode.setNext(newNode);
 		}
 		
-		Node tempCurrent = firstNode;
-		this.firstNode = node;
-		this.firstNode.setNext(tempCurrent);
-		tempCurrent.setNext(lastNode);
-		this.lastNode.setNext(firstNode);
+		lastNode = newNode;
+		size++;
 	}
 	
-	public Node getNode(){
-		if(firstNode.equals(lastNode)){
-			Node nodeToReturn = firstNode;
-			return firstNode;
+	public E popNode(){
+
+		if(size == 0){
+			return null;
 		}
-		Node nodeToReturn = this.firstNode;
-		this.firstNode = nodeToReturn.getNext();
-		return null;
+		Node<E> ln = lastNode.getNext();
+		if(1 == size){
+			lastNode = null;
+		}else{
+			lastNode.setNext(lastNode.getNext().getNext());
+		}
+
+		size--;
+		return ln.getValue();
+	}
+
+	public int getSize() {
+		return size;
+	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("Ring: ");
+		if(lastNode != null){
+			Node<E> n = lastNode.getNext();
+			for(int i=0; i<size; i++){
+				sb.append(" " + n.getValue());
+				n = n.getNext();
+			}
+		}
+		return sb.toString();
 	}
 	
 }
