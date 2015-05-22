@@ -1,6 +1,8 @@
 
 public class Pool implements IPool{
-
+	
+	private int nbWorkers;
+	
 	public Pool(int nbWorkers){
 		
 	}

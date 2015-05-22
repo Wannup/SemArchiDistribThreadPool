@@ -3,7 +3,7 @@ package file.circulaire;
 public class FileCirculaire {
 
 	private Node lastNode;
-	private Node currentNode;
+	private Node firstNode;
 	
 	public FileCirculaire(){
 		
@@ -18,24 +18,34 @@ public class FileCirculaire {
 	}*/
 	
 	public void addNode(Node node){
-		if(currentNode != null){
-			
+		if(firstNode == null && lastNode == null){
+			firstNode = node;
+		}
+		else if(firstNode != null && lastNode == null){
+			lastNode = node;
+			firstNode.setNext(lastNode);
+			lastNode.setNext(firstNode);
+		}
+		else{
+			Node nodeNext = firstNode;
+			firstNode = node;
+		//	firstNode.setNext(next);
 		}
 		
-		Node tempCurrent = currentNode;
-		this.currentNode = node;
-		this.currentNode.setNext(tempCurrent);
+		Node tempCurrent = firstNode;
+		this.firstNode = node;
+		this.firstNode.setNext(tempCurrent);
 		tempCurrent.setNext(lastNode);
-		this.lastNode.setNext(currentNode);
+		this.lastNode.setNext(firstNode);
 	}
 	
 	public Node getNode(){
-		if(currentNode.equals(lastNode)){
-			Node nodeToReturn = currentNode;
-			return currentNode;
+		if(firstNode.equals(lastNode)){
+			Node nodeToReturn = firstNode;
+			return firstNode;
 		}
-		Node nodeToReturn = this.currentNode;
-		this.currentNode = nodeToReturn.getNext();
+		Node nodeToReturn = this.firstNode;
+		this.firstNode = nodeToReturn.getNext();
 		return null;
 	}
 	
